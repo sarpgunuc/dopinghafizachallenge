@@ -9,6 +9,8 @@ import com.example.demo.dto.QuestionResponse;
 import com.example.demo.dto.ResultResponse;
 import com.example.demo.dto.StartQuizRequest;
 import com.example.demo.model.*;
+import com.example.demo.repository.StudentQuizRepository;
+import com.example.demo.repository.StudentRepository;
 import com.example.demo.service.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +26,13 @@ public class StudentQuizController {
 
     @Autowired
     private StudentAnswerService studentAnswerService;
+
+    @Autowired
+    private StudentQuizRepository studentQuizRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
 
     @PostMapping("/start")
     public ResponseEntity<StudentQuiz> startQuiz(@RequestBody StartQuizRequest request) {
@@ -53,4 +62,13 @@ public class StudentQuizController {
         ResultResponse resultResponse = new ResultResponse(studentQuizId, studentQuiz.getStudent(), studentQuiz.getQuiz(), score);
         return ResponseEntity.ok(resultResponse);
     }
+    
+    @GetMapping("/student/{studentId}")
+    public ResponseEntity<List<StudentQuiz>> getStudentQuizzes(@PathVariable("studentId") Long studentId) {
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException("Student not found"));
+        List<StudentQuiz> studentQuizzes = studentQuizRepository.findByStudent(student);
+        return ResponseEntity.ok(studentQuizzes);
+    }
+
+    
 }

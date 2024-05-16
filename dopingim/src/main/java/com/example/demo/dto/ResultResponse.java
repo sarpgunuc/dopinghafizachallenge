@@ -8,6 +8,8 @@ public class ResultResponse {
     private Student student;
     private Quiz quiz;
     private int score;
+    
+    
 
     public ResultResponse(Long studentQuizId, Student student, Quiz quiz, int score) {
         this.studentQuizId = studentQuizId;
