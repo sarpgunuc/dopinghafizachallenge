@@ -17,7 +17,7 @@ public class Question {
     @JsonBackReference
     private Quiz quiz;
 
-    // Getters and setters
+
     public Long getId() {
         return id;
     }

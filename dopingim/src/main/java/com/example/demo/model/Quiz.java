@@ -16,7 +16,7 @@ public class Quiz {
     @JsonManagedReference
     private List<Question> questions;
 
-    // Getters and setters
+    
     public Long getId() {
         return id;
     }
