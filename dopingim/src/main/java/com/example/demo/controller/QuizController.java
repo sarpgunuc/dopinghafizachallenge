@@ -5,18 +5,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.model.Quiz;
 import com.example.demo.service.QuizService;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/quizzes")
 public class QuizController {
+
     @Autowired
     private QuizService quizService;
 
     @PostMapping
     public ResponseEntity<Quiz> createQuiz(@RequestBody Quiz quiz) {
-        Quiz savedQuiz = quizService.saveQuiz(quiz);
-        return ResponseEntity.ok(savedQuiz);
+        Quiz createdQuiz = quizService.createQuiz(quiz);
+        return ResponseEntity.ok(createdQuiz);
     }
 
     @GetMapping

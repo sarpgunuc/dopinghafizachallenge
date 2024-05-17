@@ -3,72 +3,46 @@ package com.example.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.example.demo.dto.AnswerRequest;
-import com.example.demo.dto.QuestionResponse;
-import com.example.demo.dto.ResultResponse;
-import com.example.demo.dto.StartQuizRequest;
-import com.example.demo.model.*;
-import com.example.demo.repository.StudentQuizRepository;
-import com.example.demo.repository.StudentRepository;
-import com.example.demo.service.*;
+import com.example.demo.model.StudentQuiz;
+import com.example.demo.service.StudentQuizService;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/student-quizzes")
 public class StudentQuizController {
+
     @Autowired
     private StudentQuizService studentQuizService;
 
-    @Autowired
-    private QuestionService questionService;
-
-    @Autowired
-    private StudentAnswerService studentAnswerService;
-
-    @Autowired
-    private StudentQuizRepository studentQuizRepository;
-
-    @Autowired
-    private StudentRepository studentRepository;
-
-
     @PostMapping("/start")
-    public ResponseEntity<StudentQuiz> startQuiz(@RequestBody StartQuizRequest request) {
-        StudentQuiz studentQuiz = studentQuizService.startQuiz(request.getStudentId(), request.getQuizId());
-        return ResponseEntity.ok(studentQuiz);
+    public ResponseEntity<StudentQuiz> startQuiz(@RequestBody StudentQuiz studentQuiz) {
+        StudentQuiz createdStudentQuiz = studentQuizService.startQuiz(studentQuiz.getStudent().getId(), studentQuiz.getQuiz().getId());
+        return ResponseEntity.ok(createdStudentQuiz);
     }
 
-    @GetMapping("/{studentQuizId}/questions")
-    public ResponseEntity<List<QuestionResponse>> getQuizQuestions(@PathVariable("studentQuizId") Long studentQuizId) {
-        List<Question> questions = studentQuizService.getQuizQuestions(studentQuizId);
-        List<QuestionResponse> questionResponses = questions.stream()
-            .map(q -> new QuestionResponse(q.getId(), q.getQuestionText()))
-            .collect(Collectors.toList());
-        return ResponseEntity.ok(questionResponses);
-    }
-
-    @PostMapping("/answers")
-    public ResponseEntity<StudentAnswer> answerQuestion(@RequestBody AnswerRequest request) {
-        StudentAnswer studentAnswer = studentAnswerService.saveAnswer(request.getStudentQuizId(), request.getQuestionId(), request.getAnswer());
-        return ResponseEntity.ok(studentAnswer);
-    }
-
-    @GetMapping("/{studentQuizId}/result")
-    public ResponseEntity<ResultResponse> getResult(@PathVariable("studentQuizId") Long studentQuizId) {
-        int score = studentQuizService.calculateScore(studentQuizId);
-        StudentQuiz studentQuiz = studentQuizService.getStudentQuizById(studentQuizId);
-        ResultResponse resultResponse = new ResultResponse(studentQuizId, studentQuiz.getStudent(), studentQuiz.getQuiz(), score);
-        return ResponseEntity.ok(resultResponse);
-    }
-    
-    @GetMapping("/student/{studentId}")
-    public ResponseEntity<List<StudentQuiz>> getStudentQuizzes(@PathVariable("studentId") Long studentId) {
-        Student student = studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException("Student not found"));
-        List<StudentQuiz> studentQuizzes = studentQuizRepository.findByStudent(student);
+    @GetMapping
+    public ResponseEntity<List<StudentQuiz>> getAllStudentQuizzes() {
+        List<StudentQuiz> studentQuizzes = studentQuizService.getAllStudentQuizzes();
         return ResponseEntity.ok(studentQuizzes);
     }
 
-    
+    @GetMapping("/{id}")
+    public ResponseEntity<StudentQuiz> getStudentQuizById(@PathVariable("id") Long id) {
+        StudentQuiz studentQuiz = studentQuizService.getStudentQuizById(id);
+        if (studentQuiz != null) {
+            return ResponseEntity.ok(studentQuiz);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/student/{studentId}/quiz/{quizId}/score")
+    public ResponseEntity<Integer> getStudentQuizScore(@PathVariable("studentId") Long studentId, @PathVariable("quizId") Long quizId) {
+        StudentQuiz studentQuiz = studentQuizService.findByStudentIdAndQuizId(studentId, quizId);
+        if (studentQuiz != null) {
+            return ResponseEntity.ok(studentQuiz.getScore());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

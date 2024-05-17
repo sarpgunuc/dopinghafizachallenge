@@ -5,18 +5,31 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.model.StudentAnswer;
 import com.example.demo.service.StudentAnswerService;
-import com.example.demo.dto.AnswerRequest;
+import com.example.demo.service.StudentQuizService;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/student-answers")
 public class StudentAnswerController {
+
     @Autowired
     private StudentAnswerService studentAnswerService;
 
+    @Autowired
+    private StudentQuizService studentQuizService;
+
     @PostMapping
-    public ResponseEntity<StudentAnswer> createStudentAnswer(@RequestBody AnswerRequest request) {
-        StudentAnswer savedStudentAnswer = studentAnswerService.saveAnswer(request.getStudentQuizId(), request.getQuestionId(), request.getAnswer());
+    public ResponseEntity<StudentAnswer> createStudentAnswer(@RequestBody StudentAnswer studentAnswer) {
+        if (studentAnswer.getStudentQuiz() == null || studentAnswer.getStudentQuiz().getId() == null ||
+            studentAnswer.getQuestion() == null || studentAnswer.getQuestion().getId() == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        StudentAnswer savedStudentAnswer = studentAnswerService.saveAnswer(studentAnswer.getStudentQuiz().getId(), studentAnswer.getQuestion().getId(), studentAnswer.getAnswer());
+        int score = studentAnswerService.calculateScore(studentAnswer.getStudentQuiz().getId());
+        studentQuizService.updateScore(studentAnswer.getStudentQuiz().getId(), score);
+
         return ResponseEntity.ok(savedStudentAnswer);
     }
 

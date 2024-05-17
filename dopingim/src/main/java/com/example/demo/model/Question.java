@@ -1,10 +1,12 @@
 package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity
 public class Question {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,6 +19,7 @@ public class Question {
     @JsonBackReference
     private Quiz quiz;
 
+    // Getters and Setters
 
     public Long getId() {
         return id;

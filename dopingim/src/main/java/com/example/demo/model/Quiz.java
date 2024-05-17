@@ -1,22 +1,25 @@
 package com.example.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class Quiz {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     private String name;
 
-    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL , orphanRemoval = true)
     @JsonManagedReference
     private List<Question> questions;
 
-    
+    // Getters and Setters
+
     public Long getId() {
         return id;
     }

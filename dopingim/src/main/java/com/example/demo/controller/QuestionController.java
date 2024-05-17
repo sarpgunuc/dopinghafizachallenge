@@ -5,22 +5,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.model.Question;
 import com.example.demo.service.QuestionService;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/questions")
 public class QuestionController {
+
     @Autowired
     private QuestionService questionService;
 
-    @PostMapping("/{quizId}")
-    public ResponseEntity<Question> createQuestion(@RequestBody Question question, @PathVariable("quizId") Long quizId) {
-        Question savedQuestion = questionService.saveQuestion(question, quizId);
-        if (savedQuestion != null) {
-            return ResponseEntity.ok(savedQuestion);
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+    @PostMapping
+    public ResponseEntity<Question> createQuestion(@RequestBody Question question) {
+        Question createdQuestion = questionService.createQuestion(question);
+        return ResponseEntity.ok(createdQuestion);
     }
 
     @GetMapping

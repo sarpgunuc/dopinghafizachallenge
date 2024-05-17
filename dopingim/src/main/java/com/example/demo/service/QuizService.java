@@ -4,14 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.demo.model.Quiz;
 import com.example.demo.repository.QuizRepository;
+
 import java.util.List;
 
 @Service
 public class QuizService {
+    
     @Autowired
     private QuizRepository quizRepository;
 
-    public Quiz saveQuiz(Quiz quiz) {
+    public Quiz createQuiz(Quiz quiz) {
         return quizRepository.save(quiz);
     }
 
