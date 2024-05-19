@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.model.StudentQuiz;
 import com.example.demo.service.StudentQuizService;
+
 import java.util.List;
 
 @RestController
@@ -41,6 +42,26 @@ public class StudentQuizController {
         StudentQuiz studentQuiz = studentQuizService.findByStudentIdAndQuizId(studentId, quizId);
         if (studentQuiz != null) {
             return ResponseEntity.ok(studentQuiz.getScore());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{studentQuizId}/result")
+    public ResponseEntity<StudentQuiz> getStudentQuizResult(@PathVariable("studentQuizId") Long studentQuizId) {
+        StudentQuiz studentQuiz = studentQuizService.getStudentQuizById(studentQuizId);
+        if (studentQuiz != null) {
+            return ResponseEntity.ok(studentQuiz);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/student/{studentId}")
+    public ResponseEntity<List<StudentQuiz>> getStudentQuizzes(@PathVariable("studentId") Long studentId) {
+        List<StudentQuiz> studentQuizzes = studentQuizService.getStudentQuizzesByStudentId(studentId);
+        if (studentQuizzes != null) {
+            return ResponseEntity.ok(studentQuizzes);
         } else {
             return ResponseEntity.notFound().build();
         }

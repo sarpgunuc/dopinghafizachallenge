@@ -53,4 +53,9 @@ public class StudentQuizService {
         studentQuiz.setScore(score);
         studentQuizRepository.save(studentQuiz);
     }
+
+    public List<StudentQuiz> getStudentQuizzesByStudentId(Long studentId) {
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException("Student not found"));
+        return studentQuizRepository.findByStudent(student);
+    }
 }
