@@ -1,10 +1,15 @@
 package com.example.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import com.example.demo.model.StudentQuiz;
 import com.example.demo.service.StudentQuizService;
+import com.example.demo.service.StudentService;
+
+import com.example.demo.util.JwtUtil;
 
 import java.util.List;
 
@@ -15,8 +20,18 @@ public class StudentQuizController {
     @Autowired
     private StudentQuizService studentQuizService;
 
+    @Autowired
+    private StudentService studentService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @PostMapping("/start")
-    public ResponseEntity<StudentQuiz> startQuiz(@RequestBody StudentQuiz studentQuiz) {
+    public ResponseEntity<StudentQuiz> startQuiz(@RequestBody StudentQuiz studentQuiz, @RequestHeader("Authorization") String token) {
+        String username = studentQuiz.getStudent().getUsername();
+        if (!jwtUtil.validateToken(token.substring(7), studentService.loadUserByUsername(username))) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         StudentQuiz createdStudentQuiz = studentQuizService.startQuiz(studentQuiz.getStudent().getId(), studentQuiz.getQuiz().getId());
         return ResponseEntity.ok(createdStudentQuiz);
     }
