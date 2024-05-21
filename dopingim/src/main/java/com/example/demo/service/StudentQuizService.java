@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Quiz;
@@ -24,6 +25,7 @@ public class StudentQuizService {
     @Autowired
     private QuizRepository quizRepository;
 
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public StudentQuiz startQuiz(Long studentId, Long quizId) {
         Student student = studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException("Student not found"));
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new RuntimeException("Quiz not found"));

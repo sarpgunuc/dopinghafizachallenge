@@ -31,16 +31,17 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    	JwtRequestFilter jwtRequestFilter = new JwtRequestFilter();
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtRequestFilter jwtRequestFilter) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
-                    .requestMatchers("/authenticate","/api/students/signup","/api/students/**","/api/quizzes").permitAll()
+                    .requestMatchers("/authenticate", "/api/students/signup", "/api/students/**", "/api/quizzes", "/h2-console/**").permitAll()
                     .anyRequest().authenticated()
-            );
-        
+            )
+            .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+            .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
+
         return http.build();
     }
 }

@@ -21,16 +21,17 @@ public class StudentAnswerController {
 
     @PostMapping
     public ResponseEntity<StudentAnswer> createStudentAnswer(@RequestBody StudentAnswer studentAnswer) {
-        if (studentAnswer.getStudentQuiz() == null || studentAnswer.getStudentQuiz().getId() == null ||
+       if (studentAnswer.getStudentQuiz() == null || studentAnswer.getStudentQuiz().getId() == null ||
             studentAnswer.getQuestion() == null || studentAnswer.getQuestion().getId() == null) {
             return ResponseEntity.badRequest().body(null);
         }
 
         StudentAnswer savedStudentAnswer = studentAnswerService.saveAnswer(studentAnswer.getStudentQuiz().getId(), studentAnswer.getQuestion().getId(), studentAnswer.getAnswer());
-        int score = studentAnswerService.calculateScore(studentAnswer.getStudentQuiz().getId());
-        studentQuizService.updateScore(studentAnswer.getStudentQuiz().getId(), score);
+       int score = studentAnswerService.calculateScore(studentAnswer.getStudentQuiz().getId());
+       studentQuizService.updateScore(studentAnswer.getStudentQuiz().getId(), score);
 
-        return ResponseEntity.ok(savedStudentAnswer);
+       return ResponseEntity.ok(savedStudentAnswer);
+
     }
 
     @GetMapping

@@ -29,10 +29,13 @@ public class StudentQuizController {
     @PostMapping("/start")
     public ResponseEntity<StudentQuiz> startQuiz(@RequestBody StudentQuiz studentQuiz, @RequestHeader("Authorization") String token) {
         String username = studentQuiz.getStudent().getUsername();
-        if (!jwtUtil.validateToken(token.substring(7), studentService.loadUserByUsername(username))) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    	System.out.println("BAKALIM YANLIŞ MI ");
+     //   if (!jwtUtil.validateToken(token.substring(7), studentService.loadUserByUsername(username))) {
+        //	System.out.println("İFİN ALTI ------------ ");
+          //  return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+       // }
         StudentQuiz createdStudentQuiz = studentQuizService.startQuiz(studentQuiz.getStudent().getId(), studentQuiz.getQuiz().getId());
+    	System.out.println("RETURN ÜST-------------------- ");
         return ResponseEntity.ok(createdStudentQuiz);
     }
 
