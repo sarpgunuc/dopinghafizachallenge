@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.model.Student;
 import com.example.demo.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,10 +28,16 @@ public class StudentService implements UserDetailsService {
         return studentRepository.save(student);
     }
 
+    @Cacheable("students")
     public Optional<Student> findStudentByUsername(String username) {
-        return studentRepository.findByUsername(username);
+        long start = System.currentTimeMillis();
+        Optional<Student> student = studentRepository.findByUsername(username);
+        long end = System.currentTimeMillis();
+        System.out.println("findStudentByUsername execution time: " + (end - start) + "ms");
+        return student;
     }
-
+    
+    @Cacheable("students")
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
     }

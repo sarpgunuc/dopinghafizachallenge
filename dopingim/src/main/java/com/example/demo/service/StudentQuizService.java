@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -42,10 +43,12 @@ public class StudentQuizService {
         return studentQuizRepository.findAll();
     }
 
+    @Cacheable("studentQuizzes")
     public StudentQuiz getStudentQuizById(Long id) {
         return studentQuizRepository.findById(id).orElse(null);
     }
 
+    @Cacheable("studentQuizzes")
     public StudentQuiz findByStudentIdAndQuizId(Long studentId, Long quizId) {
         return studentQuizRepository.findByStudentIdAndQuizId(studentId, quizId);
     }
@@ -56,6 +59,7 @@ public class StudentQuizService {
         studentQuizRepository.save(studentQuiz);
     }
 
+    @Cacheable("studentQuizzes")
     public List<StudentQuiz> getStudentQuizzesByStudentId(Long studentId) {
         Student student = studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException("Student not found"));
         return studentQuizRepository.findByStudent(student);
