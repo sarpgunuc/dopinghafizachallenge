@@ -8,6 +8,7 @@ class DopingimApplicationTests {
 
 	@Test
 	void contextLoads() {
+		System.out.println("---TESTLER ÇALIŞIYOR---------------------------"); 
 	}
 
 }
