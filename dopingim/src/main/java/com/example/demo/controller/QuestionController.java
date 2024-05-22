@@ -14,19 +14,22 @@ public class QuestionController {
 
     @Autowired
     private QuestionService questionService;
+    
+    //Creating questions
 
     @PostMapping
     public ResponseEntity<Question> createQuestion(@RequestBody Question question) {
         Question createdQuestion = questionService.createQuestion(question);
         return ResponseEntity.ok(createdQuestion);
     }
-
+// Get questions
     @GetMapping
     public ResponseEntity<List<Question>> getAllQuestions() {
         List<Question> questions = questionService.getAllQuestions();
         return ResponseEntity.ok(questions);
     }
 
+    // Get questions y id 
     @GetMapping("/{id}")
     public ResponseEntity<Question> getQuestionById(@PathVariable("id") Long id) {
         Question question = questionService.getQuestionById(id);

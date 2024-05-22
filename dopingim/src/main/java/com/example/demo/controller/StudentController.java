@@ -32,6 +32,7 @@ public class StudentController {
   
    
 
+    // Creating students
     @PostMapping("/signup")
     public ResponseEntity<Student> signup(@RequestBody Student student) {
         System.out.println("Signup request received: " + student);
@@ -40,6 +41,7 @@ public class StudentController {
         return ResponseEntity.ok(savedStudent);
     }
 
+    // Student login 
     @PostMapping("/student-login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
         String username = credentials.get("username");
@@ -56,6 +58,7 @@ public class StudentController {
         return ResponseEntity.ok(Map.of("token", jwt));
     }
 
+    // Get student by username
 
     @GetMapping("/{username}")
     public ResponseEntity<Student> getStudent(@PathVariable("username") String username) {
@@ -67,6 +70,7 @@ public class StudentController {
         }
     }
 
+    // get all student
     @GetMapping
     public ResponseEntity<List<Student>> getAllStudents() {
         List<Student> students = studentService.getAllStudents();

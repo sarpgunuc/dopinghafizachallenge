@@ -19,6 +19,7 @@ public class StudentAnswerController {
     @Autowired
     private StudentQuizService studentQuizService;
 
+    // Creating answers 
     @PostMapping
     public ResponseEntity<StudentAnswer> createStudentAnswer(@RequestBody StudentAnswer studentAnswer) {
        if (studentAnswer.getStudentQuiz() == null || studentAnswer.getStudentQuiz().getId() == null ||
@@ -34,12 +35,14 @@ public class StudentAnswerController {
 
     }
 
+    // Get all answers 
     @GetMapping
     public ResponseEntity<List<StudentAnswer>> getAllStudentAnswers() {
         List<StudentAnswer> studentAnswers = studentAnswerService.getAllStudentAnswers();
         return ResponseEntity.ok(studentAnswers);
     }
 
+    // Get answers by id 
     @GetMapping("/{id}")
     public ResponseEntity<StudentAnswer> getStudentAnswerById(@PathVariable("id") Long id) {
         StudentAnswer studentAnswer = studentAnswerService.getStudentAnswerById(id);

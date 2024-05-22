@@ -15,18 +15,21 @@ public class QuizController {
     @Autowired
     private QuizService quizService;
 
+    // Creating quiz
     @PostMapping
     public ResponseEntity<Quiz> createQuiz(@RequestBody Quiz quiz) {
         Quiz createdQuiz = quizService.createQuiz(quiz);
         return ResponseEntity.ok(createdQuiz);
     }
 
+    // Get all quiz 
     @GetMapping
     public ResponseEntity<List<Quiz>> getAllQuizzes() {
         List<Quiz> quizzes = quizService.getAllQuizzes();
         return ResponseEntity.ok(quizzes);
     }
 
+    // Get quiz by id 
     @GetMapping("/{id}")
     public ResponseEntity<Quiz> getQuizById(@PathVariable("id") Long id) {
         Quiz quiz = quizService.getQuizById(id);

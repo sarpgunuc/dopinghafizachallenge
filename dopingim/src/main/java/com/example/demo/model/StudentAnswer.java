@@ -9,6 +9,7 @@ public class StudentAnswer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Bir öğrenci birden fazla teste katılabilir veya bir teste birden fazla öğrenci katılabilir.
     @ManyToOne
     @JoinColumn(name = "student_quiz_id")
     @JsonBackReference

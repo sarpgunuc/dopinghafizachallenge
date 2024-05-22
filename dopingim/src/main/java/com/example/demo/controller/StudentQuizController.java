@@ -25,7 +25,7 @@ public class StudentQuizController {
 
     @Autowired
     private JwtUtil jwtUtil;
-
+// Starting quiz , it provides active registration for quiz
     @PostMapping("/start")
     public ResponseEntity<StudentQuiz> startQuiz(@RequestBody StudentQuiz studentQuiz, @RequestHeader("Authorization") String token) {
         String username = studentQuiz.getStudent().getUsername();
@@ -39,12 +39,14 @@ public class StudentQuizController {
         return ResponseEntity.ok(createdStudentQuiz);
     }
 
+    // Get all quiz
     @GetMapping
     public ResponseEntity<List<StudentQuiz>> getAllStudentQuizzes() {
         List<StudentQuiz> studentQuizzes = studentQuizService.getAllStudentQuizzes();
         return ResponseEntity.ok(studentQuizzes);
     }
 
+    // get quiz by id 
     @GetMapping("/{id}")
     public ResponseEntity<StudentQuiz> getStudentQuizById(@PathVariable("id") Long id) {
         StudentQuiz studentQuiz = studentQuizService.getStudentQuizById(id);
@@ -55,6 +57,7 @@ public class StudentQuizController {
         }
     }
 
+    // Get students score 
     @GetMapping("/student/{studentId}/quiz/{quizId}/score")
     public ResponseEntity<Integer> getStudentQuizScore(@PathVariable("studentId") Long studentId, @PathVariable("quizId") Long quizId) {
         StudentQuiz studentQuiz = studentQuizService.findByStudentIdAndQuizId(studentId, quizId);
@@ -65,6 +68,7 @@ public class StudentQuizController {
         }
     }
 
+    // get all the results of student 
     @GetMapping("/{studentQuizId}/result")
     public ResponseEntity<StudentQuiz> getStudentQuizResult(@PathVariable("studentQuizId") Long studentQuizId) {
         StudentQuiz studentQuiz = studentQuizService.getStudentQuizById(studentQuizId);
@@ -75,6 +79,7 @@ public class StudentQuizController {
         }
     }
 
+    
     @GetMapping("/student/{studentId}")
     public ResponseEntity<List<StudentQuiz>> getStudentQuizzes(@PathVariable("studentId") Long studentId) {
         List<StudentQuiz> studentQuizzes = studentQuizService.getStudentQuizzesByStudentId(studentId);
