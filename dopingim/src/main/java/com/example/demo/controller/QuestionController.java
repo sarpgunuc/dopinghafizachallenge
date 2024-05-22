@@ -29,7 +29,7 @@ public class QuestionController {
         return ResponseEntity.ok(questions);
     }
 
-    // Get questions y id 
+    // Get questions by id 
     @GetMapping("/{id}")
     public ResponseEntity<Question> getQuestionById(@PathVariable("id") Long id) {
         Question question = questionService.getQuestionById(id);
